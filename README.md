@@ -1,6 +1,6 @@
-<p align="center"><img src="docs/logo.png" width="128" alt="Quick Translate" /></p>
+<p align="center"><img src="docs/logo.png" width="128" alt="Tarjuman Sari3" /></p>
 
-# ترجمان سريع — Quick Translate (Windows)
+# ترجمان سريع — Tarjuman Sari3 (Windows)
 
 تطبيق ويندوز لترجمة النصوص إلى العربية (أو أي لغة) بسرعة: من الشاشة (OCR) أو من النص المحدد أو الحافظة.
 Windows app that translates on-screen text, selections and clipboard into Arabic (or any language).

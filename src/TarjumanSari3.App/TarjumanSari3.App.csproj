@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Version>1.0.0</Version>
+    <RootNamespace>TarjumanSari3.App</RootNamespace>
+    <AssemblyName>TarjumanSari3</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <NoWarn>$(NoWarn);WPF0001;WFO0003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro.IconPacks.Lucide" Version="6.2.1" />
+    <Resource Include="Assets\app.ico" />
+    <ProjectReference Include="..\TarjumanSari3.Core\TarjumanSari3.Core.csproj" />
+    <ProjectReference Include="..\TarjumanSari3.Platform\TarjumanSari3.Platform.csproj" />
+  </ItemGroup>
+</Project>
+
+
+
+
+
+

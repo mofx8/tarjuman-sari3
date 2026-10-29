@@ -1,7 +1,7 @@
-# Generates the Quick Translate icon (Assets/app.ico + docs/logo.png). Run: pwsh tools/make-icon.ps1
+# Generates the Tarjuman Sari3 icon (Assets/app.ico + docs/logo.png). Run: pwsh tools/make-icon.ps1
 Add-Type -AssemblyName System.Drawing
 $root = Split-Path $PSScriptRoot -Parent
-$assets = Join-Path $root 'src/QuickTranslate.App/Assets'
+$assets = Join-Path $root 'src/TarjumanSari3.App/Assets'
 $docs = Join-Path $root 'docs'
 New-Item -ItemType Directory $assets, $docs -Force | Out-Null
 

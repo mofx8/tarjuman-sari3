@@ -1,0 +1,292 @@
+<Window x:Class="TarjumanSari3.App.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        Title="الإعدادات — ترجمان سريع" Width="800" Height="660" MinHeight="480"
+        Style="{StaticResource AppWindow}" WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+        <TabControl x:Name="SettingsTabs">
+            <!-- General -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="Settings" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="عام" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12" >
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,10">
+                        <TextBlock Text="واجهة التطبيق (تُطبَّق بالكامل بعد إعادة التشغيل):" VerticalAlignment="Center" />
+                        <ComboBox x:Name="UiLangBox" Width="140" Margin="8,0" />
+                    </StackPanel>
+                    <TextBlock Text="عند النقر على أيقونة التطبيق (بجانب الساعة / الأيقونات المخفية):" Margin="0,4,0,4" />
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                        <TextBlock Text="نقرة واحدة:" VerticalAlignment="Center" Margin="0,3,12,3" />
+                        <ComboBox x:Name="TrayClickBox" Grid.Column="1" Margin="0,3" />
+                        <TextBlock Text="نقرتان:" Grid.Row="1" VerticalAlignment="Center" Margin="0,3,12,3" />
+                        <ComboBox x:Name="TrayDoubleBox" Grid.Row="1" Grid.Column="1" Margin="0,3" />
+                    </Grid>
+                    <CheckBox x:Name="StartWithWindows" Content="تشغيل التطبيق مع بدء ويندوز" Margin="0,4" />
+                    <StackPanel Orientation="Horizontal" Margin="24,2,0,8">
+                        <TextBlock Text="تأخير التشغيل (ثوانٍ):" VerticalAlignment="Center" />
+                        <TextBox x:Name="StartupDelay" Width="60" Margin="8,0" />
+                    </StackPanel>
+                    <CheckBox x:Name="StartMinimized" Content="البدء مصغّراً في منطقة الإشعارات" Margin="0,4" />
+                    <CheckBox x:Name="ShowTray" Content="إظهار الأيقونة بجانب الساعة" Margin="0,4" />
+                    <CheckBox x:Name="CloseToTray" Content="زر الإغلاق (×) يخفي التطبيق بدلاً من إنهائه" Margin="0,4" />
+                    <CheckBox x:Name="RunAdmin" Margin="0,4">
+                        <TextBlock Text="التشغيل بصلاحية المدير (يلزم ليعمل الاختصار فوق البرامج/الألعاب التي تعمل كمدير)" TextWrapping="Wrap" />
+                    </CheckBox>
+                    <TextBlock Text="عند التثبيت تُنشأ مهمة مجدولة بأعلى الصلاحيات فلا يظهر طلب UAC عند كل تشغيل." Opacity="0.65" TextWrapping="Wrap" Margin="24,0,0,8" />
+                    <CheckBox x:Name="CheckUpdates" Content="فحص التحديثات تلقائياً" Margin="0,4" />
+                    <CheckBox x:Name="AutoClipboard" Content="ترجمة أي نص أنسخه تلقائياً (يتطلب إعادة تشغيل التطبيق)" Margin="0,4" />
+                    <CheckBox x:Name="SaveHistory" Content="حفظ سجل الترجمات محلياً" Margin="0,4" />
+                    <TextBlock Text="التطبيقات المستثناة (أسماء العمليات مفصولة بفاصلة، مثل: notepad, game)" Margin="0,12,0,4" />
+                    <TextBox x:Name="IgnoredProcs" />
+                    <TextBlock x:Name="DataPathText" Opacity="0.6" Margin="0,16,0,0" TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button x:Name="OpenDataBtn" Content="فتح مجلد البيانات" Padding="12,5" />
+                        <Button x:Name="ClearCacheBtn" Content="مسح الكاش" Padding="12,5" Margin="8,0,0,0" />
+                    </StackPanel>
+                </StackPanel></ScrollViewer>
+            </TabItem>
+
+            <!-- Hotkeys -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="Keyboard" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="الاختصارات" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+                    <TextBlock Text="انقر على الحقل ثم اضغط الاختصار الجديد. (Delete للمسح، Esc للإلغاء)" Opacity="0.7" Margin="0,0,0,8" TextWrapping="Wrap" />
+                    <ItemsControl x:Name="HotkeyList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4" Background="Transparent" ToolTipService.ShowDuration="30000" ToolTipService.InitialShowDelay="250">
+                                    <Grid.ToolTip>
+                                        <ToolTip Padding="10,8"><TextBlock Text="{Binding Description}" TextWrapping="Wrap" MaxWidth="380" /></ToolTip>
+                                    </Grid.ToolTip>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="200" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1" Text="{Binding Display, Mode=OneWay}" IsReadOnly="True" IsReadOnlyCaretVisible="False" TextAlignment="Center"
+                                             FlowDirection="LeftToRight" Tag="{Binding}" GotKeyboardFocus="Recorder_Focus" LostKeyboardFocus="Recorder_Lost"
+                                             PreviewKeyDown="Recorder_KeyDown" Padding="6" />
+                                    <Button Grid.Column="2" Content="{Binding ResetLabel}" Margin="8,0,0,0" Padding="10,4" Tag="{Binding}" Click="ResetHotkey_Click" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock x:Name="HotkeyWarn" Foreground="OrangeRed" Margin="0,12,0,0" TextWrapping="Wrap" />
+                    <Button x:Name="ResetAllHotkeys" Content="استعادة كل الاختصارات الافتراضية" Margin="0,12,0,0" Padding="12,5" HorizontalAlignment="Left" />
+                </StackPanel></ScrollViewer>
+            </TabItem>
+
+            <!-- Translation -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="Languages" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="الترجمة" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <TextBlock Text="اللغة الهدف:" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <ComboBox x:Name="TargetLang" Grid.Column="1" />
+                        <TextBlock Text="لغة المصدر:" Grid.Column="2" VerticalAlignment="Center" Margin="16,0,8,0" />
+                        <ComboBox x:Name="SourceLang" Grid.Column="3" />
+                    </Grid>
+                    <CheckBox x:Name="RotateEngines" Content="توزيع الطلبات بالتناوب بين المحركات (يرفع الحد العملي كثيراً)" Margin="0,4" />
+                    <CheckBox x:Name="UseCache" Content="استخدام الكاش الدائم (لا تُرسل نفس الجملة مرتين)" Margin="0,4" />
+                    <CheckBox x:Name="NotifyFallback" Content="إشعاري عندما يتعطل محرك ويُستخدم غيره" Margin="0,4" />
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,2">
+                        <TextBlock Text="صوت النطق:" VerticalAlignment="Center" />
+                        <ComboBox x:Name="SpeechBox" Width="360" Margin="8,0" />
+                    </StackPanel>
+                    <CheckBox x:Name="DictionaryMode" Content="وضع القاموس للكلمة الواحدة (معانٍ متعددة ونطق وأمثلة)" Margin="0,4" />
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock Text="اختصار «استبدال النص المحدد» يكتب بلغة:" VerticalAlignment="Center" />
+                        <ComboBox x:Name="ReplaceLang" Width="200" Margin="8,0" />
+                    </StackPanel>
+                    <TextBlock Text="إذا كان النص المحدد بهذه اللغة أصلاً فيُترجم إلى اللغة الهدف بدلاً من ذلك." Opacity="0.65" TextWrapping="Wrap" Margin="0,2,0,0" />
+                    <TextBlock Text="المحركات (رتّبها واختر المفعّل):" Margin="0,12,0,4" FontWeight="SemiBold" />
+                    <ListBox x:Name="EngineList" Height="170">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding Enabled}" Content="{Binding Name}" />
+                                    <TextBlock Text="{Binding Status}" Opacity="0.6" Margin="12,0,0,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <Button x:Name="EngineUp" Padding="12,5"><icons:PackIconLucide Kind="ChevronUp" Width="15" Height="15" /></Button>
+                        <Button x:Name="EngineDown" Padding="12,5" Margin="6,0,0,0"><icons:PackIconLucide Kind="ChevronDown" Width="15" Height="15" /></Button>
+                        <Button x:Name="RefreshStatus" Padding="12,5" Margin="12,0,0,0">
+                            <StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="RefreshCw" Width="14" Height="14" VerticalAlignment="Center" /><TextBlock Text="تحديث الحالة" Margin="8,0,0,0" /></StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="مفاتيح اختيارية (تُخزَّن مشفّرة على جهازك فقط) لرفع الحد بشكل كبير:" Margin="0,14,0,4" TextWrapping="Wrap" />
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="130" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                        <TextBlock Text="DeepL" VerticalAlignment="Center" Margin="0,3" />
+                        <PasswordBox x:Name="DeepLKey" Grid.Column="1" Margin="0,3" />
+                        <TextBlock Text="Azure Translator" Grid.Row="1" VerticalAlignment="Center" Margin="0,3" />
+                        <PasswordBox x:Name="AzureKey" Grid.Row="1" Grid.Column="1" Margin="0,3" />
+                        <TextBlock Text="Azure region" Grid.Row="2" VerticalAlignment="Center" Margin="0,3" />
+                        <TextBox x:Name="AzureRegion" Grid.Row="2" Grid.Column="1" Margin="0,3" FlowDirection="LeftToRight" />
+                        <TextBlock Text="LibreTranslate URL" Grid.Row="3" VerticalAlignment="Center" Margin="0,3" />
+                        <TextBox x:Name="LibreUrl" Grid.Row="3" Grid.Column="1" Margin="0,3" FlowDirection="LeftToRight" />
+                        <TextBlock Text="LibreTranslate key" Grid.Row="4" VerticalAlignment="Center" Margin="0,3" />
+                        <PasswordBox x:Name="LibreKey" Grid.Row="4" Grid.Column="1" Margin="0,3" />
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <Button x:Name="DeepLTest" Padding="12,5">
+                            <StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="CircleCheck" Width="14" Height="14" VerticalAlignment="Center" /><TextBlock Text="فحص مفتاح DeepL والاستهلاك" Margin="8,0,0,0" /></StackPanel>
+                        </Button>
+                        <TextBlock x:Name="DeepLStatus" VerticalAlignment="Center" Margin="12,0,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <TextBlock Text="القاموس الشخصي — كل سطر: كلمة=الترجمة المفضلة" Margin="0,14,0,4" />
+                    <TextBox x:Name="GlossaryBox" AcceptsReturn="True" Height="70" FlowDirection="LeftToRight" />
+                </StackPanel></ScrollViewer>
+            </TabItem>
+
+            <!-- Per-program profiles -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="AppWindow" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="البرامج" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+                    <TextBlock Text="إعدادات خاصة بكل برنامج أو لعبة: عندما يكون البرنامج في المقدمة وتضغط أي اختصار تُطبَّق هذه الإعدادات تلقائياً بدل العامة." TextWrapping="Wrap" Margin="0,0,0,8" />
+                    <ListBox x:Name="ProfileList" Height="130" />
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                        <TextBlock Text="البرنامج" VerticalAlignment="Center" Margin="0,4" />
+                        <ComboBox x:Name="ProfProcess" Grid.Column="1" Margin="0,4" IsEditable="True" FlowDirection="LeftToRight" />
+                        <TextBlock Text="اللغة الهدف" Grid.Row="1" VerticalAlignment="Center" Margin="0,4" />
+                        <ComboBox x:Name="ProfTarget" Grid.Row="1" Grid.Column="1" Margin="0,4" />
+                        <TextBlock Text="لغة المصدر" Grid.Row="2" VerticalAlignment="Center" Margin="0,4" />
+                        <ComboBox x:Name="ProfSource" Grid.Row="2" Grid.Column="1" Margin="0,4" />
+                        <TextBlock Text="حجم الخط" Grid.Row="3" VerticalAlignment="Center" Margin="0,4" />
+                        <TextBox x:Name="ProfFontSize" Grid.Row="3" Grid.Column="1" Margin="0,4" FlowDirection="LeftToRight" />
+                        <TextBlock Text="لون النص" Grid.Row="4" VerticalAlignment="Center" Margin="0,4" />
+                        <TextBox x:Name="ProfTextColor" Grid.Row="4" Grid.Column="1" Margin="0,4" FlowDirection="LeftToRight" />
+                        <TextBlock Text="لون الخلفية" Grid.Row="5" VerticalAlignment="Center" Margin="0,4" />
+                        <TextBox x:Name="ProfBg" Grid.Row="5" Grid.Column="1" Margin="0,4" FlowDirection="LeftToRight" />
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button x:Name="ProfSave" Padding="12,5">
+                            <StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="Save" Width="14" Height="14" VerticalAlignment="Center" /><TextBlock Text="إضافة / تحديث" Margin="8,0,0,0" /></StackPanel>
+                        </Button>
+                        <Button x:Name="ProfDelete" Padding="12,5" Margin="8,0,0,0">
+                            <StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="Trash2" Width="14" Height="14" VerticalAlignment="Center" /><TextBlock Text="حذف" Margin="8,0,0,0" /></StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="اترك الحقل فارغاً (أو «افتراضي») ليبقى على الإعداد العام. لا تنسَ زر «حفظ» أسفل النافذة." Opacity="0.65" TextWrapping="Wrap" Margin="0,8,0,0" />
+                </StackPanel></ScrollViewer>
+            </TabItem>
+            <!-- Offline packs -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="HardDriveDownload" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="دون إنترنت" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+                    <TextBlock Text="نماذج ترجمة تعمل على جهازك بلا إنترنت ولا حدود (Opus-MT). نزّل الأساس أولاً ثم لغات المصدر التي تحتاجها." TextWrapping="Wrap" Margin="0,0,0,8" />
+                    <CheckBox x:Name="PreferOffline" Margin="0,4">
+                        <TextBlock Text="تفضيل الترجمة المحلية على الإنترنت (أبطأ قليلاً وأقل دقة، لكن بلا حدود وبخصوصية كاملة)" TextWrapping="Wrap" />
+                    </CheckBox>
+                    <ListBox x:Name="PackList" Height="260" Margin="0,8">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <icons:PackIconLucide Kind="CircleCheck" Width="16" Height="16" Foreground="#22C55E" Visibility="{Binding InstalledVisibility}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <icons:PackIconLucide Kind="Download" Width="16" Height="16" Opacity="0.5" Visibility="{Binding MissingVisibility}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Text="{Binding Title}" Width="360" />
+                                    <TextBlock Text="{Binding Status}" Opacity="0.7" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="PackInstall" Content="تنزيل وتثبيت المحدد" Padding="12,5" />
+                        <Button x:Name="PackRemove" Content="حذف المحدد" Padding="12,5" Margin="8,0,0,0" />
+                        <Button x:Name="PackCancel" Content="إلغاء التنزيل" Padding="12,5" Margin="8,0,0,0" IsEnabled="False" />
+                    </StackPanel>
+                    <ProgressBar x:Name="PackProgress" Height="8" Margin="0,10,0,0" Minimum="0" Maximum="1" />
+                    <TextBlock x:Name="PackStatus" Opacity="0.7" Margin="0,6,0,0" TextWrapping="Wrap" />
+                </StackPanel></ScrollViewer>
+            </TabItem>
+            <!-- Appearance -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="Palette" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="المظهر" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="170" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                        <TextBlock Text="السمة" VerticalAlignment="Center" Margin="0,4" />
+                        <ComboBox x:Name="ThemeBox" Grid.Column="1" Margin="0,4" />
+                        <TextBlock Text="لون التمييز" Grid.Row="1" VerticalAlignment="Center" Margin="0,4" />
+                        <TextBox x:Name="AccentBox" Grid.Row="1" Grid.Column="1" Margin="0,4" FlowDirection="LeftToRight" ToolTip="مثال: #3B82F6" />
+                        <TextBlock Text="خط الترجمة" Grid.Row="2" VerticalAlignment="Center" Margin="0,4" />
+                        <ComboBox x:Name="FontBox" Grid.Row="2" Grid.Column="1" Margin="0,4" IsEditable="True" />
+                        <TextBlock Text="حجم الخط" Grid.Row="3" VerticalAlignment="Center" Margin="0,4" />
+                        <Slider x:Name="FontSizeSlider" Grid.Row="3" Grid.Column="1" Minimum="10" Maximum="40" Margin="0,4" />
+                        <TextBlock Text="لون النص" Grid.Row="4" VerticalAlignment="Center" Margin="0,4" />
+                        <TextBox x:Name="TextColorBox" Grid.Row="4" Grid.Column="1" Margin="0,4" FlowDirection="LeftToRight" />
+                        <TextBlock Text="لون الخلفية (ARGB)" Grid.Row="5" VerticalAlignment="Center" Margin="0,4" />
+                        <TextBox x:Name="BgColorBox" Grid.Row="5" Grid.Column="1" Margin="0,4" FlowDirection="LeftToRight" />
+                        <TextBlock Text="شفافية لوحة الترجمة" Grid.Row="6" VerticalAlignment="Center" Margin="0,4" />
+                        <Slider x:Name="OpacitySlider" Grid.Row="6" Grid.Column="1" Minimum="0.3" Maximum="1" Margin="0,4" />
+                        <TextBlock Text="قوة تعتيم الشاشة" Grid.Row="7" VerticalAlignment="Center" Margin="0,4" />
+                        <Slider x:Name="DimSlider" Grid.Row="7" Grid.Column="1" Minimum="0" Maximum="0.85" Margin="0,4" />
+                        <TextBlock Text="استدارة الزوايا" Grid.Row="8" VerticalAlignment="Center" Margin="0,4" />
+                        <Slider x:Name="RadiusSlider" Grid.Row="8" Grid.Column="1" Minimum="0" Maximum="24" Margin="0,4" />
+                    </Grid>
+                    <CheckBox x:Name="ShowOriginal" Content="إظهار بطاقة النص الأصلي مع زر النسخ" Margin="0,12,0,4" />
+                    <CheckBox x:Name="Animations" Content="الحركات الانتقالية" Margin="0,4" />
+                    <CheckBox x:Name="ImageMatchBackground" Margin="0,4">
+                        <TextBlock Text="في ترجمة الصور: مطابقة لون خلفية الصورة ولون النص تلقائياً" TextWrapping="Wrap" />
+                    </CheckBox>
+                    <CheckBox x:Name="AutoCopy" Content="نسخ الترجمة تلقائياً" Margin="0,4" />
+                    <StackPanel Orientation="Horizontal" Margin="0,8">
+                        <TextBlock Text="إغلاق تلقائي بعد (ثوانٍ، 0 = حتى النقر):" VerticalAlignment="Center" />
+                        <TextBox x:Name="AutoClose" Width="60" Margin="8,0" />
+                    </StackPanel>
+                </StackPanel></ScrollViewer>
+            </TabItem>
+
+            <!-- OCR -->
+            <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><icons:PackIconLucide Kind="ScanText" Width="15" Height="15" VerticalAlignment="Center" /><TextBlock Text="الالتقاط و OCR" Margin="7,0,0,0" /></StackPanel></TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+                    <TextBlock Text="الوضع الافتراضي لاختصار «ترجمة منطقة»" />
+                    <ComboBox x:Name="ModeBox" Margin="0,4,0,12" />
+                    <TextBlock Text="لغة قراءة النص (OCR)" />
+                    <ComboBox x:Name="OcrLangBox" Margin="0,4,0,4" />
+                    <TextBlock x:Name="OcrInfo" Opacity="0.65" TextWrapping="Wrap" Margin="0,0,0,12" />
+                    <CheckBox x:Name="Upscale" Content="تكبير المناطق الصغيرة قبل القراءة (أدق)" Margin="0,4" />
+                    <TextBlock Text="حساسية دمج الأسطر في فقرة (0.5 أقل – 2 أكثر)" Margin="0,12,0,4" />
+                    <Slider x:Name="MergeSlider" Minimum="0.5" Maximum="2" />
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <TextBlock Text="فاصل التحديث في الترجمة المباشرة (مللي ثانية):" VerticalAlignment="Center" />
+                        <TextBox x:Name="LiveInterval" Width="80" Margin="8,0" />
+                    </StackPanel>
+                    <CheckBox x:Name="LiveReuse" Margin="0,14,0,0">
+                        <TextBlock Text="استخدام المنطقة المحفوظة للبرنامج تلقائياً عند بدء الترجمة المباشرة" TextWrapping="Wrap" />
+                    </CheckBox>
+                    <TextBlock Text="المناطق المحفوظة للترجمة المباشرة (لكل برنامج). لرسم منطقة جديدة استخدم اختصار «ترجمة مباشرة بمنطقة جديدة»:" Margin="0,10,0,4" TextWrapping="Wrap" />
+                    <ListBox x:Name="RegionList" Height="110" />
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <Button x:Name="RegionDelete" Content="حذف المنطقة" Padding="12,4" />
+                        <Button x:Name="RegionClear" Content="حذف الكل" Padding="12,4" Margin="8,0,0,0" />
+                    </StackPanel>
+                </StackPanel></ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,0" HorizontalAlignment="Left">
+            <Button x:Name="SaveBtn" Content="حفظ" Padding="24,6" IsDefault="True" />
+            <Button x:Name="CancelBtn" Content="إغلاق" Padding="20,6" Margin="8,0,0,0" IsCancel="True" />
+            <icons:PackIconLucide Kind="Info" Width="15" Height="15" Margin="18,0,6,0" VerticalAlignment="Center" Opacity="0.6" />
+            <TextBlock Text="مرّر الماوس فوق أي إعداد أو اختصار لتظهر فائدته." VerticalAlignment="Center" Opacity="0.6" />
+        </StackPanel>
+    </Grid>
+</Window>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
