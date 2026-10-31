@@ -83,7 +83,10 @@ public partial class App : Application
 
         ClipboardWatcher.Start(Services, this);
         FirstRunHelper.EnsureLaunchTask(Services.Settings);
-        if (Services.Settings.CheckForUpdates) _ = UpdateChecker.CheckAsync(this);
+        _ = UpdateChecker.CheckAsync(this);
+        var updateTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromHours(12) };
+        updateTimer.Tick += (_, _) => _ = UpdateChecker.CheckAsync(this);
+        updateTimer.Start();
     }
 
     public void ApplyTheme()

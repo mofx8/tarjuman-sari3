@@ -276,7 +276,8 @@ internal static class Loc
         ["تعذّر الفحص: "] = "Check failed: ",
         ["وصل حدّ الاستخدام"] = "reached its usage limit",
         ["غير صالح أو غير متاح"] = "invalid or unavailable",
-        ["يُستخدم محرك آخر تلقائياً ({0} ث راحة)."] = "Another engine is used automatically ({0} s rest).",        ["واجهة التطبيق (تُطبَّق بالكامل بعد إعادة التشغيل):"] = "Interface language (fully applied after restart):",
+        ["يُستخدم محرك آخر تلقائياً ({0} ث راحة)."] = "Another engine is used automatically ({0} s rest).",        [" — انقر هنا للتنزيل"] = " — click here to download",
+        ["واجهة التطبيق (تُطبَّق بالكامل بعد إعادة التشغيل):"] = "Interface language (fully applied after restart):",
     };
 }
 

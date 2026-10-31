@@ -297,3 +297,31 @@ public class MigrationTests
         Directory.Delete(root, true);
     }
 }
+
+public class UpdateCheckTests
+{
+    [Theory]
+    [InlineData("v1.0.1", "1.0.0.0", true)]
+    [InlineData("1.1.0", "1.0.9.0", true)]
+    [InlineData("v1.0.0", "1.0.0.0", false)]
+    [InlineData("v0.9.0", "1.0.0.0", false)]
+    [InlineData("v2.0.0-beta1", "1.9.0.0", true)]
+    [InlineData("not-a-version", "1.0.0.0", false)]
+    [InlineData("", "1.0.0.0", false)]
+    public void ComparesReleaseTagsWithTheRunningVersion(string tag, string current, bool expected) =>
+        Assert.Equal(expected, TarjumanSari3.Core.UpdateCheck.IsNewer(tag, Version.Parse(current)));
+
+    [Fact]
+    public void OldSettingsFilesGetUpdateCheckingSwitchedOnOnce()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "ts3-upd-" + Guid.NewGuid());
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "settings.json"), "{\"CheckForUpdates\": false}"); // as saved by version 1
+        var store = new TarjumanSari3.Core.Settings.SettingsStore(dir);
+        Assert.True(store.Load().CheckForUpdates);
+        // the user can switch it off again afterwards and that choice is kept
+        store.Current.CheckForUpdates = false; store.Save();
+        Assert.False(new TarjumanSari3.Core.Settings.SettingsStore(dir).Load().CheckForUpdates);
+        Directory.Delete(dir, true);
+    }
+}

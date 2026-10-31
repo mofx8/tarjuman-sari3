@@ -358,29 +358,39 @@ internal static class ClipboardWatcher
 /// <summary>Looks for a newer GitHub release. Set <see cref="Repo"/> ("owner/name") when publishing.</summary>
 internal static class UpdateChecker
 {
-    public const string Repo = ""; // publisher fills this in; empty disables the check
+    /// <summary>GitHub repository ("owner/name") whose latest release is compared with the running version.</summary>
+    public const string Repo = "mofx8/tarjuman-sari3";
 
     public static async Task CheckAsync(App app)
     {
-        if (Repo.Length == 0) return;
+        if (Repo.Length == 0 || !app.Services.Settings.CheckForUpdates) return;
         try
         {
             using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
             http.DefaultRequestHeaders.UserAgent.ParseAdd("TarjumanSari3");
-            using var doc = System.Text.Json.JsonDocument.Parse(await http.GetStringAsync($"https://api.github.com/repos/{Repo}/releases/latest"));
-            var tag = doc.RootElement.GetProperty("tag_name").GetString()?.TrimStart('v', 'V');
+            using var resp = await http.GetAsync($"https://api.github.com/repos/{Repo}/releases/latest");
+            if (resp.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // a private repository (or one without releases) cannot be read anonymously
+                Log.Info("Update", "no public release found (the repository is private or has no release yet)");
+                return;
+            }
+            resp.EnsureSuccessStatusCode();
+            using var doc = System.Text.Json.JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
+            var tag = doc.RootElement.GetProperty("tag_name").GetString();
             var url = doc.RootElement.GetProperty("html_url").GetString();
             var current = typeof(UpdateChecker).Assembly.GetName().Version;
-            if (Version.TryParse(tag, out var latest) && current != null && latest > current && url != null)
-                app.Dispatcher.Invoke(() => app.NotifyUpdate(Loc.T("يتوفر إصدار جديد: ") + tag, url));
+            if (url == null || !TarjumanSari3.Core.UpdateCheck.IsNewer(tag, current))
+            {
+                Log.Info("Update", $"up to date (running {current}, latest {tag})");
+                return;
+            }
+            Log.Info("Update", $"new version available: {tag}");
+            var s = app.Services.Settings;
+            if (s.LastUpdateNotice == tag) return; // already told the user about this one
+            s.LastUpdateNotice = tag!; app.Services.Store.Save();
+            _ = app.Dispatcher.BeginInvoke(() => app.NotifyUpdate(Loc.T("يتوفر إصدار جديد: ") + tag + Loc.T(" — انقر هنا للتنزيل"), url));
         }
-        catch (Exception ex) { Log.Error("Update", ex); }
+        catch (Exception ex) { Log.Warn("Update", ex.Message); }
     }
 }
-
-
-
-
-
-
-

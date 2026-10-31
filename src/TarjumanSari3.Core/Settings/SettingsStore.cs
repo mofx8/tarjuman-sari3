@@ -64,6 +64,8 @@ public sealed class SettingsStore
                 Current = new();
             }
             EnsureAllHotkeys(Current);
+            // v2: update checking is on by default; files saved by v1 still carry the old "off", so switch it on once.
+            if (Current.SettingsVersion < 2) { Current.CheckForUpdates = true; Current.SettingsVersion = 2; try { Save(); } catch { } }
             return Current;
         }
     }

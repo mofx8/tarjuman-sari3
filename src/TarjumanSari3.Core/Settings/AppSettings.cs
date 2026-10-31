@@ -39,7 +39,10 @@ public sealed class AppSettings
     public bool CloseToTray { get; set; } = true;
     public bool RunAsAdministrator { get; set; } = true;
     public int StartupDelaySeconds { get; set; } = 0;
-    public bool CheckForUpdates { get; set; } = false;
+    public bool CheckForUpdates { get; set; } = true;
+    /// <summary>Bumped when a default changes in a way existing settings files must pick up (see SettingsStore).</summary>
+    public int SettingsVersion { get; set; } = 1; // files written before this field existed read as 1
+    public string LastUpdateNotice { get; set; } = "";
     public TrayAction TrayClickAction { get; set; } = TrayAction.OpenWindow;
     public TrayAction TrayDoubleClickAction { get; set; } = TrayAction.None;
     public bool FirstRunDone { get; set; } = false;
